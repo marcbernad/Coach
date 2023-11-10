@@ -1,9 +1,11 @@
 package com.example.coach.modele;
 
+import java.io.Serializable;
+
 /**
  * Classe Profil : regroupe les informations du profil
  */
-public class Profil {
+public class Profil implements Serializable {
 
 
     // constantes
