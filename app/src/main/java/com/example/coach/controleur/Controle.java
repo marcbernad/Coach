@@ -1,10 +1,15 @@
 package com.example.coach.controleur;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.example.coach.modele.AccesDistant;
 import com.example.coach.modele.AccesLocal;
 import com.example.coach.modele.Profil;
 import com.example.coach.outils.Serializer;
+import com.example.coach.vue.MainActivity;
+
+import org.json.JSONObject;
 
 import java.util.Date;
 
@@ -14,15 +19,20 @@ import java.util.Date;
 public final class Controle {
     private static Controle instance = null;
     private static Profil profil;
+    public static String nomFic = "saveprofil";
+    //public AccesLocal accesLocal;
+    private static AccesDistant accesDistant;
+    private static Context context;
+
     private Controle(Context context) {
 
         //recupSerialize(context);
-        accesLocal = AccesLocal.getInstance(context);
-        profil = accesLocal.recupDernier();
+        //accesLocal = AccesLocal.getInstance(context);
+        //profil = accesLocal.recupDernier();
+        if(context != null) {
+            Controle.context = context;
+        }
     }
-
-    public static String nomFic = "saveprofil";
-    public AccesLocal accesLocal;
 
     /**
      * Création d'une instance unique de la classe
@@ -31,6 +41,8 @@ public final class Controle {
     public final static Controle getInstance(Context context) {
         if (Controle.instance == null){
             Controle.instance = new Controle(context);
+            accesDistant = AccesDistant.getInstance();
+            accesDistant.envoi("dernier", new JSONObject());
         }
         return Controle.instance;
     }
@@ -42,10 +54,17 @@ public final class Controle {
      * @param age
      * @param sexe 1 pour homme, 0 pour femme
      */
-    public void creerProfil(Integer poids, Integer taille, Integer age, Integer sexe, Context context){
+    public void creerProfil(Integer poids, Integer taille, Integer age, Integer sexe){
         profil = new Profil(new Date(), poids, taille, age, sexe);
         //Serializer.serialize(nomFic, profil, context);
-        accesLocal.ajout(profil);
+        //accesLocal.ajout(profil);
+        accesDistant.envoi("enreg", profil.convertToJSONObject());
+    }
+
+    public void setProfil(Profil profil){
+        Controle.profil = profil;
+        ((MainActivity)context).recupProfil();
+        Log.d("affichage profil", "***********");
     }
 
     /**
