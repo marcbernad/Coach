@@ -8,12 +8,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
  * Classe Profil : regroupe les informations du profil
  */
-public class Profil implements Serializable {
+public class Profil implements Serializable, Comparable {
 
 
     // constantes
@@ -51,7 +52,7 @@ public class Profil implements Serializable {
      * Getter sur le poids
      * @return poids
      */
-    public int getPoids() {
+    public Integer getPoids() {
         return poids;
     }
 
@@ -59,7 +60,7 @@ public class Profil implements Serializable {
      * getter sur la taille
      * @return taille
      */
-    public int getTaille() {
+    public Integer getTaille() {
         return taille;
     }
 
@@ -67,7 +68,7 @@ public class Profil implements Serializable {
      * getter sur l'âge
      * @return age
      */
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
@@ -75,7 +76,7 @@ public class Profil implements Serializable {
      * getter sur le sexe
      * @return sexe
      */
-    public int getSexe() {
+    public Integer getSexe() {
         return sexe;
     }
 
@@ -139,5 +140,10 @@ public class Profil implements Serializable {
             Log.d("erreur", "************* classe Profil, méthode convertToJSONObject, erreur de conversion");
         }
         return jsonProfil;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return dateMesure.compareTo(((Profil)o).getDateMesure());
     }
 }
